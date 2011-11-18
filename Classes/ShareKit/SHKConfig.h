@@ -36,7 +36,11 @@
  leaving that decision up to the user.
  */
 
-
+// Evernote - 
+#define SHKEvernoteUserStoreURL     @""
+#define SHKEvernoteConsumerKey      @""
+#define SHKEvernoteSecretKey        @""
+#define SHKEvernoteNetStoreURLBase  @""
 
 // Delicious - https://developer.apps.yahoo.com/projects
 #define SHKDeliciousConsumerKey		@""
@@ -140,12 +144,12 @@
  */
 
 // A : show debug output
-//#define SHKDebugShowLogs			1
-//#define SHKLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#define SHKDebugShowLogs			1
+#define SHKLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 
 // B : hide debug output
-#define SHKDebugShowLogs			0
-#define SHKLog( s, ... ) 
+//#define SHKDebugShowLogs			0
+//#define SHKLog( s, ... ) 
 
 
 

@@ -89,9 +89,9 @@ BOOL SHKinit;
 	[helper setRootViewController:vc];	
 }
 
-- (void)showViewController:(UIViewController *)vc
-{	
-	if (rootViewController == nil)
+- (void)findRootViewController
+{
+    if (rootViewController == nil)
 	{
 		// Try to find the root view controller programmically
 		
@@ -116,6 +116,11 @@ BOOL SHKinit;
 		else
 			NSAssert(NO, @"ShareKit: Could not find a root view controller.  You can assign one manually by calling [[SHK currentHelper] setRootViewController:YOURROOTVIEWCONTROLLER].");
 	}
+}
+
+- (void)showViewController:(UIViewController *)vc
+{	
+	[self findRootViewController];
 	
 	// Find the top most view controller being displayed (so we can add the modal view to it and not one that is hidden)
 	UIViewController *topViewController = [self getTopViewController];	

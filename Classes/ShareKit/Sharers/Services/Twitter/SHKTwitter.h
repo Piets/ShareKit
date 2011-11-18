@@ -26,6 +26,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Twitter/Twitter.h>
+#import <Accounts/Accounts.h>
 #import "SHKOAuthSharer.h"
 #import "SHKTwitterForm.h"
 
@@ -36,6 +38,8 @@
 
 @property BOOL xAuth;
 
+
+- (BOOL)useNativeSupport;
 
 #pragma mark -
 #pragma mark UI Implementation

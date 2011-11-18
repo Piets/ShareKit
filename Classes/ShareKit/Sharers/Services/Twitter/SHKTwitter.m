@@ -83,6 +83,17 @@
 	return YES;
 }
 
+- (BOOL)useNativeSupport
+{
+    if (NSClassFromString(@"TWTweetComposeViewController"))
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 
 #pragma mark -
 #pragma mark Configuration : Dynamic Enable
@@ -97,12 +108,24 @@
 #pragma mark Authorization
 
 - (BOOL)isAuthorized
-{		
-	return [self restoreAccessToken];
+{	
+    if ([self useNativeSupport])
+    {
+        return YES;
+    }
+    else
+    {
+        return [self restoreAccessToken];
+    }
 }
 
 - (void)promptAuthorization
-{		
+{	
+    if ([self useNativeSupport])
+    {
+        return;
+    }
+    
 	if (xAuth)
 		[super authorizationFormShow]; // xAuth process
 	
@@ -185,6 +208,33 @@
 
 - (void)show
 {
+    if ([self useNativeSupport])
+    {
+        TWTweetComposeViewController *tweetViewController = [[TWTweetComposeViewController alloc] init];
+        if (item.shareType == SHKShareTypeURL)
+        {
+            [tweetViewController addURL:[item URL]];
+        }
+        
+        else if (item.shareType == SHKShareTypeImage)
+        {
+            [tweetViewController addImage:[item image]];
+        }
+        
+        else if (item.shareType == SHKShareTypeText)
+        {
+            [tweetViewController setInitialText:[item text]];
+        }
+        
+        [[SHK currentHelper] findRootViewController];
+        UIViewController *topViewController = [[SHK currentHelper] getTopViewController];
+        [topViewController presentModalViewController:tweetViewController animated:YES];
+        
+        return;
+    }
+    
+    
+    
 	if (item.shareType == SHKShareTypeURL)
 	{
 		[self shortenURL];
