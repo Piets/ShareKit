@@ -339,7 +339,7 @@
 - (BOOL)validate
 {
 	NSString *status = [item customValueForKey:@"status"];
-	return status != nil && status.length >= 0 && status.length <= 140;
+	return status != nil && status.length > 0 && status.length <= 140;
 }
 
 - (BOOL)send
@@ -519,7 +519,7 @@
 		// no ops
 	} else {
 		[body appendData:[[NSString stringWithFormat:@"--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"message\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+		[body appendData:[@"Content-Disposition: form-data; name=\"message\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 		[body appendData:[[item customValueForKey:@"status"] dataUsingEncoding:NSUTF8StringEncoding]];
 		[body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];	
 	}
