@@ -27,6 +27,7 @@
 
 #import "SHKFacebook.h"
 #import "SHKFBStreamDialog.h"
+#import <Social/Social.h>
 
 @implementation SHKFacebook
 
@@ -79,11 +80,29 @@
 	return YES; // FBConnect presents its own dialog
 }
 
+- (BOOL)useNativeSupport
+{
+    if (NSClassFromString(@"SLComposeViewController"))
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
 #pragma mark -
 #pragma mark Authentication
 
 - (BOOL)isAuthorized
-{	
+{
+	if ([self useNativeSupport])
+	{
+		return YES;
+	}
+	
+	
 	if (session == nil)
 	{
 		
@@ -107,6 +126,11 @@
 
 - (void)promptAuthorization
 {
+	if ([self useNativeSupport])
+	{
+		return;
+	}
+	
 	self.pendingFacebookAction = SHKFacebookPendingLogin;
 	self.login = [[[FBLoginDialog alloc] initWithSession:[self session]] autorelease];
 	[login show];
@@ -139,7 +163,40 @@
 #pragma mark Share API Methods
 
 - (BOOL)send
-{			
+{
+	if ([self useNativeSupport])
+    {
+		SLComposeViewController *composeController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+		
+		if (item.shareType == SHKShareTypeURL)
+        {
+            [composeController addURL:[item URL]];
+        }
+        else if (item.shareType == SHKShareTypeImage)
+        {
+            [composeController addImage:[item image]];
+        }
+        else if (item.shareType == SHKShareTypeText)
+        {
+            [composeController setInitialText:[item text]];
+        }
+		
+		
+		composeController.completionHandler = ^(SLComposeViewControllerResult result)
+		{
+			[composeController dismissModalViewControllerAnimated:YES];
+		};
+		
+		[[SHK currentHelper] findRootViewController];
+		UIViewController *topViewController = [[SHK currentHelper] getTopViewController];
+		NSLog(@"topViewController: %@",topViewController);
+		[topViewController presentModalViewController:composeController animated:YES];
+		[composeController release];
+        
+        return YES;
+    }
+	
+	
 	if (item.shareType == SHKShareTypeURL)
 	{
 		self.pendingFacebookAction = SHKFacebookPendingStatus;

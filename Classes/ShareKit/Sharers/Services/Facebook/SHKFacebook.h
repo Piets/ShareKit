@@ -49,4 +49,6 @@ typedef enum
 @property SHKFacebookPendingAction pendingFacebookAction;
 @property (retain) FBLoginDialog *login;
 
+- (BOOL)useNativeSupport;
+
 @end
